@@ -26,6 +26,7 @@ if __name__ == "__main__":
     rent = pd.read_csv('data/rent.csv', skiprows=1)
     single_fem = pd.read_excel('data/femaleinc.xlsx', skiprows=2)
     single_male = pd.read_excel('data/maleinc.xlsx', skiprows=2)
+    mortgage = pd.read_csv('data/mortgage.csv')
     
 # Cleaning and Organizing (Rent)
     # removing placeholder string chrs
@@ -68,3 +69,15 @@ if __name__ == "__main__":
     #same for male
     single_male = single_male[['Food', 'Housing', 'Healthcare', 'Transportation']]
     single_male = single_male.iloc[:, [0,2,4,6]]
+
+# Cleaning and Organizing (Mortgage)
+    # cut out extra info
+    mortgage = mortgage.loc[:,'S2506_C01_029E':'S2506_C02_039M']
+    mortgage = mortgage.iloc[:, range(0,len(mortgage.columns), 2)]
+
+    #rename cols and remove extra row
+    mortcols = ['<200', 'percent_share_<200', '200_399', 'percent_share_200_399', '400_599', 'percent_share_400_599', '600_799', 'percent_share_600_799', '800_999', 'percent_share_800_999', "1000_1499", 'percent_share_1000_1499', '1500_1999', 'percent_share_1500_1999', '2000_2499', 'percent_share_2000_2499', '2500_2999', 'percent_share_2500_2999', '>3000', 'percent_share_>3000', 'median_cost', 'percent_share_median']
+    mortgage.rename(columns=build_rename_dict(mortgage.columns, mortcols), inplace=True)
+    mortgage = mortgage[1:]
+
+    
