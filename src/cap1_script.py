@@ -63,3 +63,8 @@ if __name__ == "__main__":
     single_male.columns = new_header
 
     # cut down the df to necessary columns only
+    single_fem = single_fem[['Food', 'Housing', 'Healthcare', 'Transportation']]
+    single_fem = single_fem.iloc[:, [0,2,4,6]]
+    #same for male
+    single_male = single_male[['Food', 'Housing', 'Healthcare', 'Transportation']]
+    single_male = single_male.iloc[:, [0,2,4,6]]
