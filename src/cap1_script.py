@@ -2,9 +2,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import scipy.stats as stats
+import matplotlib.mlab as mlab
+plt.style.use("fivethirtyeight")
 
 
 def show_a_row(df, index):
+    '''
+
+    '''
     lst = []
     for i in range(len(df.columns)):
         lst.append(df.iloc[index,i])
@@ -13,11 +19,37 @@ def show_a_row(df, index):
 
 
 def build_rename_dict(old, new):
+    '''
+
+    '''
     mapper = {k:v for (k,v) in zip(old, new)}
     return mapper
 
-def convert_data_types():
-    pass
+
+
+def transpose_and_relabel(df):
+    '''
+
+
+    '''
+    df = df.T
+    new_headers = df.iloc[0]
+    df = df[1:]
+    df.columns = new_headers
+    return df
+
+def convert_data_types(df, cols, target):
+        '''
+        Parameters: df: a Pandas DataFrame
+                    cols: a list of columns to be changed
+                    type: the target datatype
+
+        Returns: Nothing, this function makes changes to a df in place.
+
+
+        '''
+        for i in cols:
+            df[i] = df[i].astype(target)
 
 
 if __name__ == "__main__":
@@ -33,17 +65,12 @@ if __name__ == "__main__":
     rentcols = ['id', 'name', 'average', 'average_moe', 'studio', 'studio_moe', '1bed', '1bed_moe', '2bed', '2bed_moe', '3bed', '3bed_moe', '4bed', '4bed_moe', '5bed', '5bed_moe']
     rent.replace({'-': np.NaN, '**': np.NaN, '3,500+':3500, '***':np.NaN, '100-':100}, inplace=True)
     #rename columns
-    
     rent.rename(columns=build_rename_dict(rent.columns, rentcols), inplace=True)
-    #converting datatypes
-    rent['studio'] = rent['studio'].astype(float)
-    rent['studio_moe'] = rent['studio_moe'].astype(float)
-    rent['1bed'] = rent['1bed'].astype(float)
-    rent['1bed_moe'] = rent['1bed_moe'].astype(float)
-    rent['4bed'] = rent['4bed'].astype(float)
-    rent['4bed_moe'] = rent['4bed_moe'].astype(float)
-    rent['5bed'] = rent['5bed'].astype(float)
-    rent['5bed_moe'] = rent['5bed_moe'].astype(float)
+    
+    # converting datatypes
+    change_cols = ['studio', 'studio_moe', '1bed', '1bed_moe', '4bed', '4bed_moe', '5bed', '5bed_moe']
+    convert_data_types(rent, change_cols, float)
+
     #fillna with average of each column
     rent = rent.iloc[:,2:].apply(lambda x: x.fillna(x.mean()),axis=0)
 
@@ -53,15 +80,9 @@ if __name__ == "__main__":
     single_male.dropna(how='all', inplace=True)
     
     #transpose df and relabel columns
-    single_fem = single_fem.T
-    new_header = single_fem.iloc[0]
-    single_fem = single_fem[1:]
-    single_fem.columns = new_header
+    single_fem = transpose_and_relabel(single_fem)
     #same for male
-    single_male = single_male.T
-    new_header = single_male.iloc[0]
-    single_male = single_male[1:]
-    single_male.columns = new_header
+    single_male = transpose_and_relabel(single_male)
 
     # cut down the df to necessary columns only
     single_fem = single_fem[['Food', 'Housing', 'Healthcare', 'Transportation']]
@@ -80,4 +101,24 @@ if __name__ == "__main__":
     mortgage.rename(columns=build_rename_dict(mortgage.columns, mortcols), inplace=True)
     mortgage = mortgage[1:]
 
-    
+# The Plot Thickens
+    fig, ax = plt.subplots(figsize=(6,6.8))
+    ax.hist(rent['1bed'], bins=40, alpha=.75)
+    ax.set_xlabel('Average Rent (Dollars)')
+    ax.set_title("Average Rent (1BR)")
+    ax.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean')
+    ax.legend()
+
+#an attempt at fitting a line
+    # rent_dist = stats.norm(loc=np.mean(rent['1bed']), scale=np.std(rent['1bed']) )
+    # y = rent_dist.pdf(40)
+    # ax.plot(x, rent_dist.pdf(x)*10000)
+    # y = stats.norm.pdf(40, np.mean(rent['1bed']), np.std(rent['1bed']))
+    # x = np.linspace(0,2300, len(rent['1bed']))
+    # m, s = stats.norm.fit(rent['1bed'])
+    # pdf_g = stats.norm.pdf(x, m, s)
+
+
+    # ax.plot(x, y, 'r--')
+    plt.savefig('images/rent_hist.png')
+    plt.show()
