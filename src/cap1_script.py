@@ -40,4 +40,4 @@ if __name__ == "__main__":
     rent['5bed'] = rent['5bed'].astype(float)
     rent['5bed_moe'] = rent['5bed_moe'].astype(float)
     #fillna with average of each column
-    df = rent.iloc[:,2:].apply(lambda x: x.fillna(x.mean()),axis=0)
+    rent = rent.iloc[:,2:].apply(lambda x: x.fillna(x.mean()),axis=0)
