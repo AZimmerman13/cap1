@@ -60,7 +60,13 @@ def merge_and_average_dfs(df1, df2, cols, new_index):
     return new_df
 
 
-
+def plot_dist(mu, sigma, xmin, xmax, title, xlabel, color):
+    fig, ax = plt.subplots()
+    x = np.linspace(xmin, xmax, 500)
+    ax.plot(x, stats.norm.pdf(x, mu, sigma), color=color)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    plt.tight_layout()
 
 
 if __name__ == "__main__":
@@ -70,8 +76,9 @@ if __name__ == "__main__":
     single_fem = pd.read_excel('data/femaleinc.xlsx', skiprows=2)
     single_male = pd.read_excel('data/maleinc.xlsx', skiprows=2)
     mortgage = pd.read_csv('data/mortgage.csv')
-    all_singles_average = pd.DataFrame(columns=['Food', 'Housing', 'Healthcare', "Transportation"])
+
     
+
 # Cleaning and Organizing (Rent)
     # removing placeholder string chrs
     rentcols = ['id', 'name', 'average', 'average_moe', 'studio', 'studio_moe', '1bed', '1bed_moe', '2bed', '2bed_moe', '3bed', '3bed_moe', '4bed', '4bed_moe', '5bed', '5bed_moe']
@@ -97,11 +104,15 @@ if __name__ == "__main__":
     single_male = transpose_and_relabel(single_male)
 
     # cut down the df to necessary columns only
-    single_fem = single_fem[['Food', 'Housing', 'Healthcare', 'Transportation']]
-    single_fem = single_fem.iloc[:, [0,2,4,6]]
+    single_fem = single_fem[['Food', 'Housing', 'Healthcare', 'Transportation', 'Number of consumer units (in thousands)']]
+    single_fem = single_fem.iloc[:, [0,2,4,6,8]]
+    single_fem.rename(columns={'Number of consumer units (in thousands)': 'Bucket Total'}, inplace=True)
+
     #same for male
-    single_male = single_male[['Food', 'Housing', 'Healthcare', 'Transportation']]
-    single_male = single_male.iloc[:, [0,2,4,6]]
+    single_male = single_male[['Food', 'Housing', 'Healthcare', 'Transportation', 'Number of consumer units (in thousands)']]
+    single_male = single_male.iloc[:, [0,2,4,6,8]]
+    single_male.rename(columns={'Number of consumer units (in thousands)': 'Bucket Total'}, inplace=True)
+
 
     
 
@@ -148,7 +159,7 @@ if __name__ == "__main__":
     plt.tight_layout()
     # plt.set_xlabel('Average Rent (Dollars)')
     plt.savefig('images/rent_distplot.png')
-    plt.show()
+    plt.close()
 
     #Mortgage
     fig, ax = plt.subplots(figsize=(10,5))
@@ -165,7 +176,7 @@ if __name__ == "__main__":
     plt.close()
     # plt.show()
 
-    #Expenses
+    #Expenses  need to clean this up
     food_male = single_male['Food'].iloc[1:-2]
     healthcare_male = single_male['Healthcare'].iloc[1:-2]
     housing_male = single_male['Housing'].iloc[1:-2]
@@ -176,6 +187,8 @@ if __name__ == "__main__":
     housing_fem = single_fem['Housing'].iloc[1:-1]
     transportation_fem = single_fem['Transportation'].iloc[1:-1]
 
+    n = len(food_fem)
+
     food_mean = np.mean([food_male.mean(), food_fem.mean()])
     healthcare_mean = np.mean([healthcare_male.mean(), healthcare_fem.mean()])
     housing_mean = np.mean([housing_male.mean(), housing_fem.mean()])
@@ -185,6 +198,22 @@ if __name__ == "__main__":
     healthcare_std = np.mean([healthcare_male.std(), healthcare_fem.std()])
     housing_std = np.mean([housing_male.std(), housing_fem.std()])
     transportation_std = np.mean([transportation_male.std(), transportation_fem.std()])
+
+
+    plot_dist(food_mean/12, food_std/np.sqrt(n), 0, 800, "Average Monthly Food Cost", "Cost ($)", 'orange')
+    plt.savefig('images/food_dist.png')
+    # plt.close()
+
+    plot_dist(housing_mean/12, housing_std/np.sqrt(n), 0, 2500, "Average Monthly Housing Cost", "Cost ($)", 'violet')
+    plt.savefig('images/housing_dist.png')
+    # plt.close()
+
+    plot_dist(healthcare_mean/12, healthcare_std/np.sqrt(n), 0, 500, "Average Monthly Healthcare Cost", "Cost ($)", 'yellowgreen')
+    # plt.show()
+
+
+    total_women = 20785
+
 
 
 

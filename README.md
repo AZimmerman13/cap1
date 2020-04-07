@@ -20,6 +20,7 @@ only people making up to 69k/yr
 
 ![](images/mortgage_hist.png)
 ## Other "Core" Expenses
+![](images/)
 ## The Full Picture
 ### How does it compare?
 Colorado min wage
