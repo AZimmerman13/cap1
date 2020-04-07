@@ -4,15 +4,21 @@ something something something dark side
 gee that'd be swell
 
 # Data
+
+assumptions about normal distribution
 ## U.S. Census
 ### Rent
 ### Mortgage
 ## Bureau of Labor Statistics
 ### Expenses
+only people making up to 69k/yr
 
 # EDA
 ## The Cost of Housing
 ![](images/rent_hist.png)
+![](images/rent_hist_with_dist.png)
+
+![](images/mortgage_hist.png)
 ## Other "Core" Expenses
 ## The Full Picture
 ### How does it compare?

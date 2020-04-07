@@ -51,6 +51,16 @@ def convert_data_types(df, cols, target):
         for i in cols:
             df[i] = df[i].astype(target)
 
+def merge_and_average_dfs(df1, df2, cols, new_index):
+    new_df = pd.DataFrame(index=new_index, columns=cols)
+    for i in cols:
+        new_df[i] = (df1[i] + df2[i]) / 2
+
+    return new_df
+
+
+
+
 
 if __name__ == "__main__":
 
@@ -59,6 +69,7 @@ if __name__ == "__main__":
     single_fem = pd.read_excel('data/femaleinc.xlsx', skiprows=2)
     single_male = pd.read_excel('data/maleinc.xlsx', skiprows=2)
     mortgage = pd.read_csv('data/mortgage.csv')
+    all_singles_average = pd.DataFrame(columns=['Food', 'Housing', 'Healthcare', "Transportation"])
     
 # Cleaning and Organizing (Rent)
     # removing placeholder string chrs
@@ -91,6 +102,9 @@ if __name__ == "__main__":
     single_male = single_male[['Food', 'Housing', 'Healthcare', 'Transportation']]
     single_male = single_male.iloc[:, [0,2,4,6]]
 
+    
+
+
 # Cleaning and Organizing (Mortgage)
     # cut out extra info
     mortgage = mortgage.loc[:,'S2506_C01_029E':'S2506_C02_039M']
@@ -102,23 +116,50 @@ if __name__ == "__main__":
     mortgage = mortgage[1:]
 
 # The Plot Thickens
+    #Rent
     fig, ax = plt.subplots(figsize=(6,6.8))
-    ax.hist(rent['1bed'], bins=40, alpha=.75)
+    ax.hist(rent['1bed'], bins=40, alpha=.75, density=1)
     ax.set_xlabel('Average Rent (Dollars)')
-    ax.set_title("Average Rent (1BR)")
-    ax.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean')
+    ax.set_title("Average 1BR Rent (normalized)")
+    ax.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
+    plt.tight_layout()
     ax.legend()
 
-#an attempt at fitting a line
-    # rent_dist = stats.norm(loc=np.mean(rent['1bed']), scale=np.std(rent['1bed']) )
-    # y = rent_dist.pdf(40)
-    # ax.plot(x, rent_dist.pdf(x)*10000)
-    # y = stats.norm.pdf(40, np.mean(rent['1bed']), np.std(rent['1bed']))
-    # x = np.linspace(0,2300, len(rent['1bed']))
-    # m, s = stats.norm.fit(rent['1bed'])
-    # pdf_g = stats.norm.pdf(x, m, s)
-
-
-    # ax.plot(x, y, 'r--')
     plt.savefig('images/rent_hist.png')
-    plt.show()
+
+    #fitting a line
+    x = np.linspace(0,2300, len(rent['1bed']))
+    mu, sigma = stats.norm.fit(rent['1bed'])
+    pdf_g = stats.norm.pdf(x, mu, sigma)
+    ax.plot(x,pdf_g, 'r--', linewidth=1.5)
+
+    
+    plt.savefig('images/rent_hist_with_dist.png')
+    plt.close()
+
+    #Mortgage
+    fig, ax = plt.subplots(figsize=(10,5))
+    labels = [list(mortgage.columns)[i] for i in list(range(0,22,2))]
+    data = [int(i) for i in mortgage.iloc[0].iloc[list(range(0,19,2))]]  # every other entry from the first row
+    width = 1.8
+    ticklocations = np.array([1,3,5,7,9,11,13,15,17,19])
+    ax.bar(ticklocations, list(data), width, alpha=.8)
+    ax.set_xticklabels(labels, fontsize=14, rotation=60)
+    ax.set_title("Mortgage Rates ($/month)")
+    ax.set_yscale("linear")
+    plt.tight_layout()
+    plt.savefig('images/mortgage_hist.png')
+    plt.close()
+    # plt.show()
+
+    #Expenses
+    food_male = single_male['Food'].iloc[1:-2]
+    healthcare_male = single_male['Healthcare'].iloc[1:-2]
+    housing_male = single_male['Housing'].iloc[1:-2]
+    transportation_male = single_male['Transportation'].iloc[1:-2]
+
+    food_fem =single_fem['Food'].iloc[1:-1]
+    
+
+
+
