@@ -69,6 +69,24 @@ def plot_dist(mu, sigma, xmin, xmax, title, xlabel, color):
     plt.tight_layout()
 
 
+def weighted_means(ref_df, search_df, col, which_total):
+    lst = []
+    for i in ref_df:
+        weight = search_df['Bucket Total'][search_df[col] == i] / which_total
+        lst.append(weight)
+
+    mean = weighted_means_helper(lst, ref_df)
+    return mean
+
+def weighted_means_helper(weights, targets):
+    total = 0
+    for (i,j) in zip(weights, targets):
+        total += float(i*j)
+    return total
+
+
+
+
 if __name__ == "__main__":
 
 # Initialize dfs
@@ -189,10 +207,13 @@ if __name__ == "__main__":
 
     n = len(food_fem)
 
-    food_mean = np.mean([food_male.mean(), food_fem.mean()])
-    healthcare_mean = np.mean([healthcare_male.mean(), healthcare_fem.mean()])
-    housing_mean = np.mean([housing_male.mean(), housing_fem.mean()])
-    transportation_mean = np.mean([transportation_male.mean(), transportation_fem.mean()])
+    total_women = single_fem['Bucket Total'].iloc[0]
+    total_men = single_male['Bucket Total'].iloc[0]
+
+    food_mean = np.mean([weighted_means(food_fem, single_fem, 'Food', total_women), weighted_means(food_male, single_male, 'Food', total_men)])
+    healthcare_mean = np.mean([weighted_means(healthcare_fem, single_fem, 'Healthcare', total_women), weighted_means(healthcare_male, single_male, 'Healthcare', total_men)])
+    housing_mean = np.mean([weighted_means(housing_fem, single_fem, 'Housing', total_women), weighted_means(housing_male, single_male, 'Housing', total_men)])
+    transportation_mean = np.mean([weighted_means(transportation_fem, single_fem, 'Transportation', total_women), weighted_means(transportation_male, single_male, 'Transportation', total_men)])
 
     food_std = np.mean([food_male.std(), food_fem.std()])
     healthcare_std = np.mean([healthcare_male.std(), healthcare_fem.std()])
@@ -200,19 +221,38 @@ if __name__ == "__main__":
     transportation_std = np.mean([transportation_male.std(), transportation_fem.std()])
 
 
-    plot_dist(food_mean/12, food_std/np.sqrt(n), 0, 800, "Average Monthly Food Cost", "Cost ($)", 'orange')
+    plot_dist(food_mean/12, food_std/np.sqrt(n), 0, 1600, "Average Monthly Food Cost", "Cost ($)", 'orange')
     plt.savefig('images/food_dist.png')
+    plt.show()
     # plt.close()
+    
 
-    plot_dist(housing_mean/12, housing_std/np.sqrt(n), 0, 2500, "Average Monthly Housing Cost", "Cost ($)", 'violet')
+    plot_dist(housing_mean/12, housing_std/np.sqrt(n), 0, 5500, "Average Monthly Housing Cost", "Cost ($)", 'violet')
     plt.savefig('images/housing_dist.png')
     # plt.close()
+    plt.show()
 
-    plot_dist(healthcare_mean/12, healthcare_std/np.sqrt(n), 0, 500, "Average Monthly Healthcare Cost", "Cost ($)", 'yellowgreen')
-    # plt.show()
+    plot_dist(healthcare_mean/12, healthcare_std/np.sqrt(n), 0, 1300, "Average Monthly Healthcare Cost", "Cost ($)", 'yellowgreen')
+    plt.savefig("images/healthcare_dist.png")
+    plt.show()
+    # plt.close()
+
+    plot_dist(transportation_mean/12, transportation_std/np.sqrt(n), 0, 2900, "Average Monthly Transportation Cost", "Cost ($)", 'tan')
+    plt.savefig("images/transportation_dist.png")
+    plt.show()
+
+    
+
+    
 
 
-    total_women = 20785
+    
+
+
+
+
+
+
 
 
 

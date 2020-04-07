@@ -6,6 +6,7 @@ gee that'd be swell
 # Data
 
 assumptions about normal distribution
+Limitations of pre-aggregated data, weighted relatively heavily in the lowest two buckets
 ## U.S. Census
 ### Rent
 ### Mortgage
@@ -20,7 +21,20 @@ only people making up to 69k/yr
 
 ![](images/mortgage_hist.png)
 ## Other "Core" Expenses
-![](images/)
+
+
+### Food
+
+![](images/food_dist.png)
+
+### Healthcare
+
+![](images/healthcare_dist.png)
+
+### Transportation
+
+![](images/transportation_dist.png)
+
 ## The Full Picture
 ### How does it compare?
 Colorado min wage
