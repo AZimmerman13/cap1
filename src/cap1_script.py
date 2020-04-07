@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import random
 import scipy.stats as stats
 import matplotlib.mlab as mlab
+import seaborn as sns
 plt.style.use("fivethirtyeight")
 
 
@@ -137,6 +138,18 @@ if __name__ == "__main__":
     plt.savefig('images/rent_hist_with_dist.png')
     plt.close()
 
+
+    plt.figure()
+    plt.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
+    sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)")
+    # sns.distplot(rent['1bed'], hist=False, fit=stats.norm)
+    plt.legend()
+    plt.title('Average 1BR Rent (normalized)')
+    plt.tight_layout()
+    # plt.set_xlabel('Average Rent (Dollars)')
+    plt.savefig('images/rent_distplot.png')
+    plt.show()
+
     #Mortgage
     fig, ax = plt.subplots(figsize=(10,5))
     labels = [list(mortgage.columns)[i] for i in list(range(0,22,2))]
@@ -158,8 +171,23 @@ if __name__ == "__main__":
     housing_male = single_male['Housing'].iloc[1:-2]
     transportation_male = single_male['Transportation'].iloc[1:-2]
 
-    food_fem =single_fem['Food'].iloc[1:-1]
-    
+    food_fem = single_fem['Food'].iloc[1:-1]
+    healthcare_fem = single_fem['Healthcare'].iloc[1:-1]
+    housing_fem = single_fem['Housing'].iloc[1:-1]
+    transportation_fem = single_fem['Transportation'].iloc[1:-1]
+
+    food_mean = np.mean([food_male.mean(), food_fem.mean()])
+    healthcare_mean = np.mean([healthcare_male.mean(), healthcare_fem.mean()])
+    housing_mean = np.mean([housing_male.mean(), housing_fem.mean()])
+    transportation_mean = np.mean([transportation_male.mean(), transportation_fem.mean()])
+
+    food_std = np.mean([food_male.std(), food_fem.std()])
+    healthcare_std = np.mean([healthcare_male.std(), healthcare_fem.std()])
+    housing_std = np.mean([housing_male.std(), housing_fem.std()])
+    transportation_std = np.mean([transportation_male.std(), transportation_fem.std()])
+
+
+
 
 
 
