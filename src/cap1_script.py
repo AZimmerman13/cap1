@@ -66,6 +66,10 @@ def plot_dist(mu, sigma, xmin, xmax, title, xlabel, color):
     ax.plot(x, stats.norm.pdf(x, mu, sigma), color=color)
     ax.set_title(title)
     ax.set_xlabel(xlabel)
+    ax.axvline(mu, color='coral', label=(f'Mean ${int(mu)}'), linewidth=1)
+    ax.axvline(mu + sigma, color='coral',label=f"1 Std: ${int(mu + sigma)}", linewidth=1, linestyle='--')
+    ax.axvline(mu + 2*sigma, color='coral',label=f"2 Std: ${int(mu + 2*sigma)}", linewidth=2, linestyle=':')
+    ax.legend()
     plt.tight_layout()
 
 
@@ -167,7 +171,7 @@ if __name__ == "__main__":
     plt.savefig('images/rent_hist_with_dist.png')
     plt.close()
 
-
+    #seaborn distplot
     plt.figure()
     plt.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
     sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)")
@@ -210,11 +214,13 @@ if __name__ == "__main__":
     total_women = single_fem['Bucket Total'].iloc[0]
     total_men = single_male['Bucket Total'].iloc[0]
 
+    #creating weighted means
     food_mean = np.mean([weighted_means(food_fem, single_fem, 'Food', total_women), weighted_means(food_male, single_male, 'Food', total_men)])
     healthcare_mean = np.mean([weighted_means(healthcare_fem, single_fem, 'Healthcare', total_women), weighted_means(healthcare_male, single_male, 'Healthcare', total_men)])
     housing_mean = np.mean([weighted_means(housing_fem, single_fem, 'Housing', total_women), weighted_means(housing_male, single_male, 'Housing', total_men)])
     transportation_mean = np.mean([weighted_means(transportation_fem, single_fem, 'Transportation', total_women), weighted_means(transportation_male, single_male, 'Transportation', total_men)])
 
+    #standard deveations
     food_std = np.mean([food_male.std(), food_fem.std()])
     healthcare_std = np.mean([healthcare_male.std(), healthcare_fem.std()])
     housing_std = np.mean([housing_male.std(), housing_fem.std()])
@@ -222,6 +228,9 @@ if __name__ == "__main__":
 
 
     plot_dist(food_mean/12, food_std/np.sqrt(n), 0, 1600, "Average Monthly Food Cost", "Cost ($)", 'orange')
+    ax.axvline(food_mean/12 + food_std/np.sqrt(n), label=f"1 Std: ${food_mean/12 + food_std/np.sqrt(n)}")
+    ax.axvline(food_mean/12 + (food_std/np.sqrt(n)*2), label=f"2 Std: ${food_mean/12 + food_std/np.sqrt(n)}")
+
     plt.savefig('images/food_dist.png')
     plt.show()
     # plt.close()
