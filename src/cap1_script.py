@@ -72,6 +72,14 @@ def plot_dist(mu, sigma, xmin, xmax, title, xlabel, color):
     ax.legend()
     plt.tight_layout()
 
+def aggregate_mean_and_std(mu_lst, sigma_lst):
+    means = [int(i) for i in mu_lst]
+    std1 = [int(i + j) for (i,j) in zip(mu_lst, sigma_lst)]
+    std2 = [int(i + 2*j) for (i,j) in zip(mu_lst, sigma_lst)]
+    return np.sum(means), np.sum(std1), np.sum(std2)
+
+
+
 
 def weighted_means(ref_df, search_df, col, which_total):
     lst = []
@@ -112,9 +120,15 @@ if __name__ == "__main__":
     change_cols = ['studio', 'studio_moe', '1bed', '1bed_moe', '4bed', '4bed_moe', '5bed', '5bed_moe']
     convert_data_types(rent, change_cols, float)
 
+    rent1 = rent
+
     #fillna with average of each column
     rent = rent.iloc[:,2:].apply(lambda x: x.fillna(x.mean()),axis=0)
 
+    rent_greater_than_1_std_above_mean = rent1[rent1['1bed'] > np.mean(rent['1bed'])+np.std(rent['1bed'])]
+
+    n_largest = rent1.nlargest(20, '1bed')
+    n_largest_names = n_largest['name']
 # Cleaning and Organizing (Single Expenses)
     #drop blank lines (from excel formatting)
     single_fem.dropna(how='all', inplace=True)
@@ -175,6 +189,8 @@ if __name__ == "__main__":
     plt.figure()
     plt.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
     sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)")
+
+    test = sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)").get_lines()[1].get_data()
     # sns.distplot(rent['1bed'], hist=False, fit=stats.norm)
     plt.legend()
     plt.title('Average 1BR Rent (normalized)')
@@ -226,37 +242,72 @@ if __name__ == "__main__":
     housing_std = np.mean([housing_male.std(), housing_fem.std()])
     transportation_std = np.mean([transportation_male.std(), transportation_fem.std()])
 
+   
 
     plot_dist(food_mean/12, food_std/np.sqrt(n), 0, 1600, "Average Monthly Food Cost", "Cost ($)", 'orange')
     ax.axvline(food_mean/12 + food_std/np.sqrt(n), label=f"1 Std: ${food_mean/12 + food_std/np.sqrt(n)}")
     ax.axvline(food_mean/12 + (food_std/np.sqrt(n)*2), label=f"2 Std: ${food_mean/12 + food_std/np.sqrt(n)}")
 
     plt.savefig('images/food_dist.png')
-    plt.show()
-    # plt.close()
+    # plt.show()
+    plt.close()
     
 
     plot_dist(housing_mean/12, housing_std/np.sqrt(n), 0, 5500, "Average Monthly Housing Cost", "Cost ($)", 'violet')
     plt.savefig('images/housing_dist.png')
-    # plt.close()
-    plt.show()
+    plt.close()
+    # plt.show()
 
     plot_dist(healthcare_mean/12, healthcare_std/np.sqrt(n), 0, 1300, "Average Monthly Healthcare Cost", "Cost ($)", 'yellowgreen')
     plt.savefig("images/healthcare_dist.png")
-    plt.show()
-    # plt.close()
+    # plt.show()
+    plt.close()
 
     plot_dist(transportation_mean/12, transportation_std/np.sqrt(n), 0, 2900, "Average Monthly Transportation Cost", "Cost ($)", 'tan')
     plt.savefig("images/transportation_dist.png")
+    # plt.show()
+    plt.close()
+
+    
+    # Final Plot
+
+    mu_lst = [food_mean/12, healthcare_mean/12, housing_mean/12, transportation_mean/12]
+    sigma_lst = [food_std/np.sqrt(n), healthcare_std/np.sqrt(n), housing_std/np.sqrt(n), transportation_std/np.sqrt(n)]
+    total_mean, total_std1, total_std2 = aggregate_mean_and_std(mu_lst, sigma_lst)
+
+    
+
+
+
+    fig, ax = plt.subplots(figsize=(9,4.5))
+    labels = ['Mean', '1 Std']
+    data = [total_mean, total_std1]  
+    width = 1.8
+    y = np.arange(len(data))
+
+    ax.barh(y, data, alpha=.8, align="center")
+    ax.set_yticks(y)
+    ax.xaxis.grid(True)
+    ax.set_yticklabels(labels, fontsize=14)
+    ax.set_title("Total Monthly Expenses Estimate")
+    ax.axvline(1063, color='maroon', label='Federal Poverty Level ($1063)', linewidth=2)
+    ax.axvline(1200, color='olive',label=f"COVID stimulus ($1200)", linewidth=2, linestyle='-.')
+    ax.axvline(1257, color='deeppink',label=f"Federal Minimum Wage ($1257)", linewidth=1.4, linestyle='--')
+    ax.axvline(2080, color='black',label=f"CO Minimum Wage ($2080)", linewidth=2, linestyle=':')
+    ax.set_xlabel("Monthly Expense ($)")
+    
+    ax.legend()
+    for i, v in enumerate(data):
+        ax.text(v-10, i , f'${v}', color='blue', fontweight='bold', rotation=330)
+
+    
+    plt.tight_layout()
+    plt.savefig('images/final_plot.png')
     plt.show()
-
-    
-
     
 
 
     
-
 
 
 
