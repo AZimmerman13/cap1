@@ -190,12 +190,10 @@ if __name__ == "__main__":
     plt.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
     sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)")
 
-    test = sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)").get_lines()[1].get_data()
-    # sns.distplot(rent['1bed'], hist=False, fit=stats.norm)
+    # test = sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)").get_lines()[1].get_data()
     plt.legend()
     plt.title('Average 1BR Rent (normalized)')
     plt.tight_layout()
-    # plt.set_xlabel('Average Rent (Dollars)')
     plt.savefig('images/rent_distplot.png')
     plt.close()
 
@@ -271,17 +269,17 @@ if __name__ == "__main__":
     
     # Final Plot
 
-    mu_lst = [food_mean/12, healthcare_mean/12, housing_mean/12, transportation_mean/12]
-    sigma_lst = [food_std/np.sqrt(n), healthcare_std/np.sqrt(n), housing_std/np.sqrt(n), transportation_std/np.sqrt(n)]
+    mu_lst = [food_mean/12, healthcare_mean/12, np.mean(rent['1bed']), transportation_mean/12]
+    sigma_lst = [food_std/np.sqrt(n), healthcare_std/np.sqrt(n), np.std(rent['1bed'])/np.sqrt(n), transportation_std/np.sqrt(n)]
     total_mean, total_std1, total_std2 = aggregate_mean_and_std(mu_lst, sigma_lst)
 
     
 
 
 
-    fig, ax = plt.subplots(figsize=(9,4.5))
-    labels = ['Mean', '1 Std']
-    data = [total_mean, total_std1]  
+    fig, ax = plt.subplots(figsize=(10,4.8))
+    labels = ['Mean', '1 Std', '2 Std']
+    data = [total_mean, total_std1, total_std2]  
     width = 1.8
     y = np.arange(len(data))
 

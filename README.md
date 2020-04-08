@@ -41,7 +41,7 @@ The BLS data reports the average annual expenses of single men and women. Just o
 
 interesting to no that the most filled bucket is  1-1.5k.  I expect this difference can be partially explained by the definition of "1 Bedroom" in our rent catagory.  I suspect that this includes folks who are simply renting a badroom in a house, as opposed to a full, "1 Bedroom" house or apartment.
 
-![](images/housing_dist.png)
+
 
 
 ## Other Core Expenses
