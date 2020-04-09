@@ -125,10 +125,10 @@ if __name__ == "__main__":
     #fillna with average of each column
     rent = rent.iloc[:,2:].apply(lambda x: x.fillna(x.mean()),axis=0)
 
-    rent_greater_than_1_std_above_mean = rent1[rent1['1bed'] > np.mean(rent['1bed'])+np.std(rent['1bed'])]
+    rent_greater_than_2_std_above_mean = rent1[rent1['1bed'] > np.mean(rent['1bed'])+ 2* np.std(rent['1bed'])]
 
     n_largest = rent1.nlargest(20, '1bed')
-    n_largest_names = n_largest['name']
+    n_largest_names = n_largest[['name', '1bed']]
 # Cleaning and Organizing (Single Expenses)
     #drop blank lines (from excel formatting)
     single_fem.dropna(how='all', inplace=True)

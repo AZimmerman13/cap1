@@ -4,7 +4,7 @@ The newly minted COVID-19 stimulus bill has sparked conversation among both legi
 ## UBI: Universal Basic Income
 
 
-![](images/money_pic.png)
+![](images/money_pic.png) Source: cointelegraph.com
 
 
 
@@ -34,7 +34,11 @@ In summary: An appropriate UBI ought to be able to fully cover the cost of **bas
 ## U.S. Census
 ### Rent
 
-![](images/rent_table.png)
+This data was available down to the county level on the census website.  In addition to the reasons stated above for using 1 Bedroom rent, the data provided had much larger margins of error for 3, 4, and 5 bedroom accomodations, likely due to smaller samples with higher variance.
+
+Below is a table showing the 20 most expensive counties in the U.S. for 1 bedroom rent.  An appropriate follow-up to the work I have done in this project might be to apply local housing cost as a sliding variable to a UBI estimation.  That is: to determine outliers in the housing cost category and adjust UBI accordingly for those individuals.
+
+![](images/n_largest_rent.png)
 
 
 ### Mortgage
@@ -52,14 +56,15 @@ The BLS data reports the average annual expenses of single men and women. Just o
 
 ![](images/rent_distplot.png)
 
-
-interesting to no that the most filled bucket is  1-1.5k.  I expect this difference can be partially explained by the definition of "1 Bedroom" in our rent catagory.  I suspect that this includes folks who are simply renting a badroom in a house, as opposed to a full, "1 Bedroom" house or apartment.
+  I suspect that this includes folks who are simply renting a badroom in a house, as opposed to a full, "1 Bedroom" house or apartment.
 
 
 
 
 ## Other Core Expenses
-These charts are most informative from the mean rightward.  In interpreting this data, I have made the assumption that the mode is likely quite close to the minimum in this these cases.  Considering that our sample population is heavily weighted towards the lower end of the wealth scale, it is unsurprising that the most values occur around the 'best deal' in a given category.  If we recall the mean rent plot, we find that its distribution fits well with the above assumption, with a sharp incline relatively close to the mode, and a more normal decline as prices go up.
+These charts are most informative from the mean rightward.  In interpreting this data, I have made the assumption that the mode is likely quite close to the minimum in this these cases.  Considering that our sample population is heavily weighted towards the lower end of the wealth scale, it would be unsurprising for the highest number of values to occur around the lowest possible price in a given category.  If we recall the mean rent plot, we find that its distribution fits well with the above assumption, with a sharp incline relatively close to the mode, and a more normal decline as prices go up.
+
+The following three plots were calculated using weighted averages calculated from the expenses table shown above to create an approximate distribution for easch expense type.
 
 ### Food
 
@@ -72,6 +77,8 @@ uninsured and employer covered
 
 ### Transportation
 
+Note the relatively large standard deviation in this plot.
+
 ![](images/transportation_dist.png)
 
 # The Full Picture
@@ -82,15 +89,22 @@ Keeping in mind that it is important to be inclusive, rather than exclusive in t
 ![](images/final_plot.png)
 
 
+maybe make this plot show the proportions of each expense
 
 
-Colorado min wage - 12/hr - 24,960/yr
+We find that our lowest threshold for core living expenses far exceeds the federal poverty level, the federal minimum wage, and the proposed COVID stimulus check amount.
 
-Fed Min Wage - 7.25/hr - 15,080/yr
+The Colorado minimum wage would theoretically do the job here, with nearly $400/mo available for saving or additional expenditures.  I
 
-COViD stimulus - $1200/mo - 14,400/yr
 
-Fed poverty levels - single person, $12,760/yr
+
+Colorado min wage: $12/hr - $2,080/mo - $24,960/yr
+
+Fed Min Wage: 7.25/hr - $1,257/mo - $15,080/yr
+
+COViD stimulus: $1200/mo - $14,400/yr
+
+Fed poverty level, single person: $1,063/mo - $12,760/yr
 
 
 # Lessons Learned
