@@ -8,10 +8,10 @@ The newly minted COVID-19 stimulus bill has sparked conversation among both legi
 
 
 
-UBI is a an idea that has its basis in the belief that food, shelter, healthcare, and other bare necessities are, in fact, human rights.  With no preconditions other than a human pulse, it would represent a departure from the current oversight-dependent welfare systems.  It is built upon the conviction that "the real experts on what poor people need are poor people themselves" (Bregman, 2018).
-
-Randomized control trials across the globe have shown statistically significant correlation between unconditional cash tranfers and reduced crime, teen pregnancy, and malnutrition, as well as improvements in in areas like economic growth and school performance (Hanlon et al, 2014).  While organizations like GiveDirectly have successfully put this into practice across the global south, there has long been talk (both serious and not) of implementing similar strategies in more developed nations that retain high poverty levels.  It is often forgotten just how close the United States came to making this a reality as early as 1969.  Yes, thats right, Richard Nixon.  
-
+UBI is an idea that has its basis in the belief that food, shelter, healthcare, and other bare necessities are, in fact, human rights.  With no preconditions other than a human pulse, it would represent a departure from the current oversight-dependent welfare systems.  It is built upon the conviction that "the real experts on what poor people need are poor people themselves" (Bregman, 2018).
+ 
+Randomized control trials across the globe have shown statistically significant correlation between unconditional cash transfers and reduced crime, teen pregnancy, and malnutrition, as well as improvements in areas like economic growth and school performance (Hanlon et al, 2014).  While organizations like GiveDirectly have successfully put this into practice across the global south, there has long been talk (both serious and not) of implementing similar strategies in more developed nations that retain high poverty levels.  It is often forgotten just how close the United States came to making this a reality as early as 1969.  Yes, that's right, Richard Nixon. 
+ 
 Such a bill had already passed the House of Representatives, and Nixon would have been days away from guaranteeing every American family of four $1600 per year, *nearly $11,000 in 2020 dollars*.  On the day he intended to take the plan public, he was presented with the disastrous [Royal Commission Report](https://en.wikipedia.org/wiki/Royal_Commission_into_the_Operation_of_the_Poor_Laws_1832) on a late 1700s welfare program from Speenhamland, England.  The report was later revealed to be written almost entirely without the collection of data, and only to reinforce existing beliefs about the correlation between poverty and moral impurity (Bregman, 2018).  Unfortunately, the damage was already done.  The bill, along with the President's chance at making history, never fully recovered.
 
 Check out: [UBICalculator](https://ubicalculator.com/)
@@ -29,7 +29,8 @@ additional assumptions:
 
 In summary: An appropriate UBI ought to be able to fully cover the cost of **basic** necessities for a **single** person living in a **single** bedroom who, for any reason, cannot provide **any** additional income for themselves.
    
-
+### Pipeline
+I used Pandas DataFrames to turn the raw .csv data into workable tables.  My data pipeline included stripping null rows, replacing null values with column means, replacing stray ASCII charactars among the numbers, transposing and reindexing several tables, and reducing down to only essential information.
 
 ## U.S. Census
 ### Rent
@@ -58,7 +59,7 @@ Note: asymmetry between the tables.
 
 ![](images/rent_distplot.png)
 
-  It is unknown if this includes individuals who are simply renting a bedroom in a house, as opposed to a full, "1 Bedroom" house or apartment.
+It is unknown if this includes individuals who are simply renting a bedroom in a house, as opposed to a full, "1 Bedroom" house or apartment.
 
 
 
@@ -92,12 +93,15 @@ Keeping in mind that it is important to be inclusive, rather than exclusive in t
 ![](images/final_plot.png)
 
 
-maybe make this plot show the proportions of each expense
 
 
 We find that our lowest threshold for core living expenses far exceeds the federal poverty level, the federal minimum wage, and the proposed COVID stimulus check amount.  Perhaps a sign that these metrics are in need of an update.
 
 The Colorado minimum wage would theoretically do the job here, with nearly $400/mo available for saving or additional expenditures.  Keeping in mind, of course, that almost everyone has expenses beyond the core.
+
+It is safe to say that *if* UBI were to make its way back onto the legislative table or, more prescient, **if a follow-up COVID relief bill were to provide monthly payments to Americans**, the *absolute floor* for such a monthly provision should be $1600.  
+
+I contend that this figure would help a great many people keep their homes and their lives, but it would also leave out substantial swaths of our population.  Here I believe that the accounting done by the State of Colorado and five other states is sound.  **A monthly payment of roughly $2,100/mo ($12/hr equivalent) would be required** to keep as many people fed, in their homes, and away from collections as possible.
 
 
 **Annual and hourly breakdowns for the above benchmarks:**
