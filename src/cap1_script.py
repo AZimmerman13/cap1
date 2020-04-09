@@ -101,7 +101,8 @@ def weighted_means_helper(weights, targets):
 
 if __name__ == "__main__":
 
-# Initialize dfs
+# Data Pipeline
+ # Initialize dfs
     rent = pd.read_csv('data/rent.csv', skiprows=1)
     single_fem = pd.read_excel('data/femaleinc.xlsx', skiprows=2)
     single_male = pd.read_excel('data/maleinc.xlsx', skiprows=2)
@@ -109,7 +110,7 @@ if __name__ == "__main__":
 
     
 
-# Cleaning and Organizing (Rent)
+ # Cleaning and Organizing (Rent)
     # removing placeholder string chrs
     rentcols = ['id', 'name', 'average', 'average_moe', 'studio', 'studio_moe', '1bed', '1bed_moe', '2bed', '2bed_moe', '3bed', '3bed_moe', '4bed', '4bed_moe', '5bed', '5bed_moe']
     rent.replace({'-': np.NaN, '**': np.NaN, '3,500+':3500, '***':np.NaN, '100-':100}, inplace=True)
@@ -129,7 +130,7 @@ if __name__ == "__main__":
 
     n_largest = rent1.nlargest(20, '1bed')
     n_largest_names = n_largest[['name', '1bed']]
-# Cleaning and Organizing (Single Expenses)
+ # Cleaning and Organizing (Single Expenses)
     #drop blank lines (from excel formatting)
     single_fem.dropna(how='all', inplace=True)
     single_male.dropna(how='all', inplace=True)
@@ -153,7 +154,7 @@ if __name__ == "__main__":
     
 
 
-# Cleaning and Organizing (Mortgage)
+ # Cleaning and Organizing (Mortgage)
     # cut out extra info
     mortgage = mortgage.loc[:,'S2506_C01_029E':'S2506_C02_039M']
     mortgage = mortgage.iloc[:, range(0,len(mortgage.columns), 2)]
@@ -165,55 +166,33 @@ if __name__ == "__main__":
 
 # The Plot Thickens
     #Rent
-    fig, ax = plt.subplots(figsize=(6,6.8))
-    ax.hist(rent['1bed'], bins=40, alpha=.75, density=1)
-    ax.set_xlabel('Average Rent (Dollars)')
-    ax.set_title("Average 1BR Rent (normalized)")
-    ax.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
-    plt.tight_layout()
-    ax.legend()
 
-    plt.savefig('images/rent_hist.png')
-
-    #fitting a line
-    x = np.linspace(0,2300, len(rent['1bed']))
-    mu, sigma = stats.norm.fit(rent['1bed'])
-    pdf_g = stats.norm.pdf(x, mu, sigma)
-    ax.plot(x,pdf_g, 'r--', linewidth=1.5)
-
-    
-    plt.savefig('images/rent_hist_with_dist.png')
-    plt.close()
-
-    #seaborn distplot
+    #Seaborn distplot
     plt.figure()
     plt.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
     plt.axvline(np.mean(rent['1bed']) + np.std(rent['1bed']), color='coral', linewidth=1, linestyle='--', label=f"1 Std: ${int(np.mean(rent['1bed']) + np.std(rent['1bed']))}")
     plt.axvline(np.mean(rent['1bed']) + 2 * np.std(rent['1bed']), color='coral', linewidth=2, linestyle=':', label=f"2 Std: ${int(np.mean(rent['1bed']) + 2 * np.std(rent['1bed']))}")
     sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)")
-
-
-    # test = sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)").get_lines()[1].get_data()
     plt.legend()
     plt.title('Average 1BR Rent (normalized)')
     plt.tight_layout()
     plt.savefig('images/rent_distplot.png')
     plt.close()
 
-    #Mortgage
-    fig, ax = plt.subplots(figsize=(10,5))
-    labels = [list(mortgage.columns)[i] for i in list(range(0,22,2))]
-    data = [int(i) for i in mortgage.iloc[0].iloc[list(range(0,19,2))]]  # every other entry from the first row
-    width = 1.8
-    ticklocations = np.array([1,3,5,7,9,11,13,15,17,19])
-    ax.bar(ticklocations, list(data), width, alpha=.8)
-    ax.set_xticklabels(labels, fontsize=14, rotation=60)
-    ax.set_title("Mortgage Rates ($/month)")
-    ax.set_yscale("linear")
-    plt.tight_layout()
-    plt.savefig('images/mortgage_hist.png')
-    plt.close()
-    # plt.show()
+    #Mortgage (Not used)
+    # fig, ax = plt.subplots(figsize=(10,5))
+    # labels = [list(mortgage.columns)[i] for i in list(range(0,22,2))]
+    # data = [int(i) for i in mortgage.iloc[0].iloc[list(range(0,19,2))]]  # every other entry from the first row
+    # width = 1.8
+    # ticklocations = np.array([1,3,5,7,9,11,13,15,17,19])
+    # ax.bar(ticklocations, list(data), width, alpha=.8)
+    # ax.set_xticklabels(labels, fontsize=14, rotation=60)
+    # ax.set_title("Mortgage Rates ($/month)")
+    # ax.set_yscale("linear")
+    # plt.tight_layout()
+    # plt.savefig('images/mortgage_hist.png')
+    # plt.close()
+    # # plt.show()
 
     #Expenses  need to clean this up
     food_male = single_male['Food'].iloc[1:-2]
@@ -237,7 +216,7 @@ if __name__ == "__main__":
     housing_mean = np.mean([weighted_means(housing_fem, single_fem, 'Housing', total_women), weighted_means(housing_male, single_male, 'Housing', total_men)])
     transportation_mean = np.mean([weighted_means(transportation_fem, single_fem, 'Transportation', total_women), weighted_means(transportation_male, single_male, 'Transportation', total_men)])
 
-    #standard deveations
+    #standard deviations
     food_std = np.mean([food_male.std(), food_fem.std()])
     healthcare_std = np.mean([healthcare_male.std(), healthcare_fem.std()])
     housing_std = np.mean([housing_male.std(), housing_fem.std()])
@@ -246,18 +225,15 @@ if __name__ == "__main__":
    
 
     plot_dist(food_mean/12, food_std/np.sqrt(n), 0, 1600, "Average Monthly Food Cost", "Cost ($)", 'orange')
-    ax.axvline(food_mean/12 + food_std/np.sqrt(n), label=f"1 Std: ${food_mean/12 + food_std/np.sqrt(n)}")
-    ax.axvline(food_mean/12 + (food_std/np.sqrt(n)*2), label=f"2 Std: ${food_mean/12 + food_std/np.sqrt(n)}")
-
     plt.savefig('images/food_dist.png')
     # plt.show()
     plt.close()
     
-
     plot_dist(housing_mean/12, housing_std/np.sqrt(n), 0, 5500, "Average Monthly Housing Cost", "Cost ($)", 'violet')
     plt.savefig('images/housing_dist.png')
-    plt.close()
     # plt.show()
+    plt.close()
+    
 
     plot_dist(healthcare_mean/12, healthcare_std/np.sqrt(n), 0, 1300, "Average Monthly Healthcare Cost", "Cost ($)", 'yellowgreen')
     plt.savefig("images/healthcare_dist.png")
@@ -271,14 +247,10 @@ if __name__ == "__main__":
 
     
     # Final Plot
-
+    
     mu_lst = [food_mean/12, healthcare_mean/12, np.mean(rent['1bed']), transportation_mean/12]
     sigma_lst = [food_std/np.sqrt(n), healthcare_std/np.sqrt(n), np.std(rent['1bed'])/np.sqrt(n), transportation_std/np.sqrt(n)]
     total_mean, total_std1, total_std2 = aggregate_mean_and_std(mu_lst, sigma_lst)
-
-    
-
-
 
     fig, ax = plt.subplots(figsize=(10,4.8))
     labels = ['Mean', '1 Std', '2 Std']
@@ -298,10 +270,10 @@ if __name__ == "__main__":
     ax.set_xlabel("Monthly Expense ($)")
     
     ax.legend()
+    # get labels on the bars
     for i, v in enumerate(data):
         ax.text(v-10, i , f'${v}', color='blue', fontweight='bold', rotation=330)
 
-    
     plt.tight_layout()
     plt.savefig('images/final_plot.png')
     plt.close()
