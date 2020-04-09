@@ -290,7 +290,7 @@ if __name__ == "__main__":
     ax.set_yticks(y)
     ax.xaxis.grid(True)
     ax.set_yticklabels(labels, fontsize=14)
-    ax.set_title("Total Monthly Expenses Estimate")
+    ax.set_title("Total Core Monthly Expenses Estimate")
     ax.axvline(1063, color='maroon', label='Federal Poverty Level ($1063)', linewidth=2)
     ax.axvline(1200, color='olive',label=f"COVID stimulus ($1200)", linewidth=2, linestyle='-.')
     ax.axvline(1257, color='deeppink',label=f"Federal Minimum Wage ($1257)", linewidth=1.4, linestyle='--')
