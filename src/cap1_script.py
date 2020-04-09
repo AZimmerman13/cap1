@@ -188,7 +188,10 @@ if __name__ == "__main__":
     #seaborn distplot
     plt.figure()
     plt.axvline(np.mean(rent['1bed']), color='coral', linewidth=1, label='Mean ($769)')
+    plt.axvline(np.mean(rent['1bed']) + np.std(rent['1bed']), color='coral', linewidth=1, linestyle='--', label=f"1 Std: ${int(np.mean(rent['1bed']) + np.std(rent['1bed']))}")
+    plt.axvline(np.mean(rent['1bed']) + 2 * np.std(rent['1bed']), color='coral', linewidth=2, linestyle=':', label=f"2 Std: ${int(np.mean(rent['1bed']) + 2 * np.std(rent['1bed']))}")
     sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)")
+
 
     # test = sns.distplot(rent['1bed'], axlabel="Monthly Rent ($)").get_lines()[1].get_data()
     plt.legend()
@@ -301,7 +304,7 @@ if __name__ == "__main__":
     
     plt.tight_layout()
     plt.savefig('images/final_plot.png')
-    plt.show()
+    plt.close()
     
 
 
