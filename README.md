@@ -30,7 +30,7 @@ additional assumptions:
 In summary: An appropriate UBI ought to be able to fully cover the cost of **basic** necessities for a **single** person living in a **single** bedroom who, for any reason, cannot provide **any** additional income for themselves.
    
 ### Pipeline
-I used Pandas DataFrames to turn the raw .csv data into workable tables.  My data pipeline included stripping null rows, replacing null values with column means, replacing stray ASCII charactars among the numbers, transposing and reindexing several tables, changing data types, and reducing down to only essential information.
+I used Pandas DataFrames to turn the raw .csv data into workable tables.  My data pipeline included stripping null rows, replacing null values with column means, replacing stray ASCII characters among the numbers, transposing and reindexing several tables, changing data types, and reducing down to only essential information.
 
 ## U.S. Census
 ### Rent
@@ -43,13 +43,12 @@ This data was available down to the county level on the census website.  In addi
 
 
 ### Mortgage
-This data provided the biggest cleaning challenge as it was provided with non-descriptive column-names, and all columns and sub-columns were expressed laterally in a single row.  After careful consideration of the story it was telling (and fully cleaning the data) I decided to exclude this table from my final analysis, as outright home-ownership does not necessarily fall within the core parameters I have set for UBI.
+This data provided the biggest cleaning challenge as it was provided with non-descriptive column-names, and all categories and sub-categories were expressed laterally in a single row.  After careful consideration of the story it was telling (and fully cleaning the data) I decided to exclude this table from my final analysis, as outright home-ownership does not necessarily fall within the core parameters I have set for UBI.
 
 ![](images/mort_table.png)
 ## Bureau of Labor Statistics
 The BLS data reports the average annual expenses of single men and women. Just over 50% of individuals from this dataset came from income brackets below $30,000/yr, higher than the national estimate of roughly 30%.  This likely has the effect of lowering average costs when compared with the population.  An additional factor to this effect was the asymmetry of certain income categories between the two datasets.  For this reason I only considered data for income brackets up to $70,000/yr.
 
-Note: asymmetry between the tables.
 
 ![](images/expense_tables.png)
 
@@ -120,6 +119,7 @@ Fed poverty level, single person: $1,063/mo - $12,760/yr
 # Lessons Learned
 
 - For statistical analysis, the more "raw" the data is, the better.
+- It's okay to let the EDA ask some of its own questions.
 
 # Sources
 
