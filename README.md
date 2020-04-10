@@ -98,7 +98,7 @@ We find that our lowest threshold for core living expenses far exceeds the feder
 
 The Colorado minimum wage would theoretically do the job here, with nearly $400/mo available for saving or additional expenditures.  Keeping in mind, of course, that almost everyone has expenses beyond the core.
 
-It is safe to say that *if* UBI were to make its way back onto the legislative table or, more prescient, **if a follow-up COVID relief bill were to provide monthly payments to Americans**, the *absolute floor* for such a monthly provision should be $1600.  
+It is safe to say that *if* UBI were to make its way back onto the legislative table or, more prescient, **if a follow-up COVID relief bill were to provide monthly payments to Americans**, the *absolute floor* for such a monthly provision should be $1550.  
 
 I contend that this figure would help a great many people keep their homes and their lives, but it would also leave out substantial swaths of our population.  Here I believe that the accounting done by the State of Colorado and five other states is sound.  **A monthly payment of roughly $2,100/mo ($12/hr equivalent) would be required** to keep as many people fed, in their homes, and away from collections as possible.
 
