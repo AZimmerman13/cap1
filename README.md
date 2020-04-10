@@ -1,5 +1,7 @@
-# Background
-The newly minted COVID-19 stimulus bill has sparked conversation among both legislators and citizens as to how much money one needs to survive in today's world.  Whenever monthly cash payments come up in the national policy conversation, the discussion inevitably turns to Universal Basic Income (UBI).
+# UBI in the USA
+
+## Motivation
+The newly minted COVID-19 stimulus bill has sparked conversation among both legislators and citizens as to how much money one needs to survive in today's world.  Whenever monthly cash payments come up in the national policy conversation, the discussion inevitably turns to Universal Basic Income (UBI).  I wanted to take this opportunity to explore what an appropriate UBI level would look like in the US.
 
 ## UBI: Universal Basic Income
 
