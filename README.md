@@ -30,7 +30,7 @@ additional assumptions:
 In summary: An appropriate UBI ought to be able to fully cover the cost of **basic** necessities for a **single** person living in a **single** bedroom who, for any reason, cannot provide **any** additional income for themselves.
    
 ### Pipeline
-I used Pandas DataFrames to turn the raw .csv data into workable tables.  My data pipeline included stripping null rows, replacing null values with column means, replacing stray ASCII charactars among the numbers, transposing and reindexing several tables, and reducing down to only essential information.
+I used Pandas DataFrames to turn the raw .csv data into workable tables.  My data pipeline included stripping null rows, replacing null values with column means, replacing stray ASCII charactars among the numbers, transposing and reindexing several tables, changing data types, and reducing down to only essential information.
 
 ## U.S. Census
 ### Rent
